@@ -221,6 +221,16 @@ async def on_error(event: lightbulb.CommandErrorEvent) -> None:
         raise exception
 
 
+@bot.command  # COMMAND
+@lightbulb.add_checks(lightbulb.has_roles(config.admin_role_id))
+@lightbulb.option("user", "user", type=hikari.User)
+@lightbulb.command("kick", "Kick Command!")
+@lightbulb.implements(lightbulb.SlashCommand)
+async def kick(ctx: lightbulb.Context) -> None:
+    await bot.rest.kick_user(config.test_guild_id, ctx.options.user.id)
+    await ctx.respond(ctx.options.user.mention + " was kicked!")
+
+
 # Update Member Count
 # every 10 minutes (be careful testing with low numbers, i can get rate-limited)
 @ tasks.task(m=10, auto_start=True)
